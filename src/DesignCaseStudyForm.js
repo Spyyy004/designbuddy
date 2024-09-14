@@ -214,7 +214,7 @@ const CaseStudyForm = () => {
       formData.append('thoughtProcess', thoughtProcess);
       formData.append('resultAchieved', resultAchieved);
 
-      const response = await axios.post('http://localhost:5001/upload', formData, {
+      const response = await axios.post('https://designbuddy.onrender.com/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -8,6 +8,20 @@ const cors = require('cors');
 const { type } = require('os');
 require('dotenv').config();
 
+const serviceAccount = {
+  type: process.env.SERVICE_ACCOUNT_TYPE,
+  project_id: process.env.SERVICE_ACCOUNT_PROJECT_ID,
+  private_key_id: process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
+  private_key: process.env.SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, '\n'), // handle line breaks in the private key
+  client_email: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
+  client_id: process.env.SERVICE_ACCOUNT_CLIENT_ID,
+  auth_uri: process.env.SERVICE_ACCOUNT_AUTH_URI,
+  token_uri: process.env.SERVICE_ACCOUNT_TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.SERVICE_ACCOUNT_AUTH_PROVIDER_CERT_URL,
+  client_x509_cert_url: process.env.SERVICE_ACCOUNT_CLIENT_CERT_URL,
+  universe_domain: process.env.SERVICE_ACCOUNT_UNIVERSE_DOMAIN
+};
+
 const app = express();
 const port = 5001;
 app.use(cors({
@@ -17,7 +31,7 @@ app.use(cors({
 
 // Initialize Google Cloud Storage
 const storage = new Storage({
-    keyFilename: path.join(__dirname, 'service_account2.json') // Optional if using environment variable
+    credentials : serviceAccount // Optional if using environment variable
   });
 const bucket = storage.bucket('financeur-24f2e.appspot.com');
 
