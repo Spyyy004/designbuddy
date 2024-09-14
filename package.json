@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
     "framer-motion": "^11.5.4",
+    "mixpanel-browser": "^2.55.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
@@ -29,9 +30,8 @@
     ]
   },
   "engines": {
-  "node": ">=14.0.0"
-}
-,
+    "node": ">=14.0.0"
+  },
   "browserslist": {
     "production": [
       ">0.2%",

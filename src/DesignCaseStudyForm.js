@@ -1,8 +1,15 @@
+
+
+
+
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
-
+import mixpanel from 'mixpanel-browser';
+ // Initialize Mixpanel with your project token
+ mixpanel.init('3c2b5ecba43167fc94001a0b2ce32da5');
 const Container = styled.div`
   max-width: 900px;
   margin: 0 auto;
@@ -170,6 +177,9 @@ const CopyButton = styled.button`
   transition: background-color 0.3s ease;
 `;
 
+
+// Your styled components remain the same...
+
 const CaseStudyForm = () => {
   const [images, setImages] = useState([]);
   const [thoughtProcess, setThoughtProcess] = useState('');
@@ -182,6 +192,12 @@ const CaseStudyForm = () => {
     const files = Array.from(e.target.files);
     if (images.length + files.length <= 3) {
       setImages((prevImages) => [...prevImages, ...files]);
+
+      // Track image upload
+      mixpanel.track('Image Uploaded', {
+        fileCount: files.length,
+        totalImages: images.length + files.length,
+      });
     } else {
       setError('You can only upload up to 3 images.');
     }
@@ -192,6 +208,12 @@ const CaseStudyForm = () => {
     const files = Array.from(e.dataTransfer.files);
     if (images.length + files.length <= 3) {
       setImages((prevImages) => [...prevImages, ...files]);
+
+      // Track image drop upload
+      mixpanel.track('Image Dropped', {
+        fileCount: files.length,
+        totalImages: images.length + files.length,
+      });
     } else {
       setError('You can only upload up to 3 images.');
     }
@@ -199,12 +221,22 @@ const CaseStudyForm = () => {
 
   const handleRemoveImage = (index) => {
     setImages(images.filter((_, i) => i !== index));
+
+    // Track image removal
+    mixpanel.track('Image Removed', { removedImageIndex: index });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    // Track form submission start
+    mixpanel.track('Form Submission Started', {
+      imageCount: images.length,
+      thoughtProcess: thoughtProcess,
+      resultAchieved: resultAchieved,
+    });
 
     try {
       const formData = new FormData();
@@ -222,8 +254,17 @@ const CaseStudyForm = () => {
 
       const { caseStudyText } = response.data;
       setCaseStudy(caseStudyText);
+
+      // Track successful case study generation
+      mixpanel.track('Case Study Generated', {
+        imageCount: images.length,
+        caseStudyLength: caseStudyText.length,
+      });
     } catch (error) {
       setError('Failed to generate case study.');
+
+      // Track error in form submission
+      mixpanel.track('Form Submission Failed', { errorMessage: error.message });
     }
 
     setLoading(false);
@@ -301,7 +342,12 @@ const CaseStudyForm = () => {
           <h2>Generated Case Study</h2>
           <ReactMarkdown>{caseStudy}</ReactMarkdown>
           <CopyButton
-            onClick={() => navigator.clipboard.writeText(caseStudy)}
+            onClick={() => {
+              navigator.clipboard.writeText(caseStudy);
+
+              // Track Copy to Clipboard
+              mixpanel.track('Copy Case Study');
+            }}
           >
             Copy to Clipboard
           </CopyButton>

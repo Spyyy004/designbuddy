@@ -3,14 +3,23 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-
+import mixpanel from 'mixpanel-browser';
+mixpanel.init('3c2b5ecba43167fc94001a0b2ce32da5');
 const HeroSection = () => {
 
     const navigate = useNavigate();
 
     const handleGetStarted = () => {
-      navigate('/designcasestudyform'); // Redirect to the form screen
+      // Track the button click with Mixpanel
+      mixpanel.track('Get Started Clicked', {
+        section: 'Hero',
+        message: 'User clicked on Get Started button',
+      });
+
+      // Redirect to the form screen
+      navigate('/designcasestudyform');
     };
+
   return (
     <HeroContainer>
       <AnimatedBackground>
