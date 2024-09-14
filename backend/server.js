@@ -30,6 +30,8 @@ app.options('*', cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   credentials: true,
 }));
+app.options('*', cors());  // Allow preflight requests for all routes
+
 // Initialize Google Cloud Storage
 const storage = new Storage({
     credentials : serviceAccount // Optional if using environment variable
