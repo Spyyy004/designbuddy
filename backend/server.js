@@ -25,9 +25,10 @@ const serviceAccount = {
 const app = express();
 const port = 5001;
 app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: ['POST'],
-  }));
+  origin: ['https://designbuddy-1.onrender.com/'], // Replace with your frontend domain
+  methods: 'GET,POST,PUT,DELETE',  // Adjust the methods as per your needs
+  allowedHeaders: 'Content-Type,Authorization',
+}));
 
 // Initialize Google Cloud Storage
 const storage = new Storage({
